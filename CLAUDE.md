@@ -38,14 +38,23 @@ Migrations: `npx prisma migrate diff` + `npx prisma migrate deploy`, never
 - **The `api/cron/` exclusion in `config.matcher` is load-bearing.** Drop it and
   the nightly cron gets a 307 to `/sign-in`, follows it, returns 200 HTML,
   `assertCronRequest` never runs, and Vercel logs a success while the import dies
-- **Never exclude "any path containing a dot" from the matcher.** Next appends an
+- **Don't exclude "any path containing a dot" from the matcher.** Next appends an
   optional transport suffix (`.rsc`, `.json`, `.segments/...`) to every matcher
   source so the proxy keeps covering the RSC form of a route, and a leading
   `(?!.*\..*)` is tested against the whole remaining path, so it rejects the
-  request before that suffix can be split off. Every client-side navigation then
-  skips the proxy, silently. Exclude asset paths by name instead, and run
-  `node scripts/check-proxy-matcher.mjs` (part of `npm run check`), which asserts
-  the gated and skipped sets against Next's own compiled regexes
+  request before that suffix can be split off. Exclude asset paths by name
+  instead, and run `node scripts/check-proxy-matcher.mjs` (part of `npm run
+check`), which asserts the gated and skipped sets against Next's own compiled
+  regexes.
+
+  Scope note, because the obvious reading overstates this: the gap is real in the
+  regex but was **not** an exposure on the deployed site. Unauthenticated GETs to
+  `/admin.rsc`, `/admin/events.rsc`, `/train.rsc` and `/account.rsc` on
+  aaroncurtisyoga.com all still returned 307 to `/sign-in`, so Vercel resolves
+  the suffix form before the proxy runs, and a real client-side navigation sends
+  the plain path with an `RSC: 1` header anyway. The matcher here is written the
+  strict way because it should mean what it says, not because a hole was open.
+
 - `authorizedParties` is an exact-match array with no wildcard support. It lists
   every host that legitimately serves this Clerk instance. A missing entry 401s
   that host on every authenticated request, so it has to stay in sync with the

@@ -9,7 +9,10 @@
  * suffix (.rsc, .json, .segments/...) to every matcher source so the proxy keeps
  * covering the RSC form of a route. A leading "(?!.*\..*)" is tested against the
  * whole remaining path and rejects the request before that suffix can be split
- * off, so every client-side navigation skips the proxy. Nothing surfaces that.
+ * off, so the compiled matcher stops covering those forms and nothing surfaces
+ * it. Measured caveat: on Vercel the suffix form still reached the proxy in
+ * practice, so this is about the matcher meaning what it says rather than about
+ * a hole that was open in production.
  *
  * Run: node scripts/check-proxy-matcher.mjs   (wired into `npm run check`)
  */
