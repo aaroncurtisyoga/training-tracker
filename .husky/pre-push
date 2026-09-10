@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+
+# Quality gate before anything reaches the remote. Build validation is left to
+# Vercel, which is the only place with the environment variables.
+
+echo "🔍 Running pre-push quality checks..."
+
+npm run lint || {
+  echo "❌ ESLint failed. Fix linting errors before pushing."
+  exit 1
+}
+
+npx tsc --noEmit || {
+  echo "❌ TypeScript check failed. Fix type errors before pushing."
+  exit 1
+}
+
+echo "✅ Lint and types clean."

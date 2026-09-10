@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+/* The tracker is dark-only and uses exactly one brand token: the bright screen
+   accent shared with aaroncurtisyoga.com. Everything else is stock Tailwind, so
+   there is no tailwind.config.js and no shadcn token layer here. */
+@theme inline {
+  --color-cta: #1a73e8;
+}
+
+/* Paints behind the status bar and home indicator when installed standalone. */
+html {
+  background-color: #0a0e16;
+}
+
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
