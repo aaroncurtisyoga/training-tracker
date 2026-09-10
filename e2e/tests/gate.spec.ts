@@ -1,5 +1,4 @@
 import { expect, test } from "@playwright/test";
-import { ensureSignedOut } from "./utils/auth";
 
 /**
  * The whole origin is admin-only, so "signed out gets turned away" is the most
@@ -7,9 +6,10 @@ import { ensureSignedOut } from "./utils/auth";
  * runs everywhere, including a fresh checkout and CI.
  */
 test.describe("signed-out visitors", () => {
-  test.beforeEach(async ({ page }) => {
-    await ensureSignedOut(page);
-  });
+  // No sign-out hook. Playwright gives every test a fresh context and the config
+  // sets no storageState, so signed-out is already the default. Calling
+  // clerk.signOut() here would hang: it polls for window.Clerk with no timeout,
+  // and on a page that hasn't navigated yet that global never appears.
 
   for (const path of ["/", "/trends", "/log/does-not-exist"]) {
     test(`${path} redirects to sign-in`, async ({ page }) => {

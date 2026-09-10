@@ -33,13 +33,14 @@ Vercel with one daily cron. Ten runtime dependencies.
 ```bash
 npm install
 npm run dev            # http://localhost:3000
-npm run check          # eslint + tsc, run before committing
+npm run check          # eslint + tsc + proxy matcher, before committing
 npm run validate       # check + build
+npx playwright install # once, before the first e2e run
 npm run test:e2e       # Playwright
 ```
 
-Copy `.env.example` to `.env.local` and fill it in. Seven variables, listed there
-with what each one is for.
+Copy `.env.example` to `.env.local` and fill it in. Eight variables for the app,
+plus four more if you run the e2e suite. Each is listed there with what it's for.
 
 Migrations use `prisma migrate diff` + `migrate deploy`, never `migrate dev`. The
 Prisma CLI reads `.env` and not `.env.local`, so prefix commands with

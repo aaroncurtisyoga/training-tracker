@@ -22,8 +22,13 @@ export default defineConfig({
     ? undefined
     : {
         command: "npm run dev",
-        url: "http://localhost:3000",
+        // Probe robots.txt, not "/". Playwright only treats 200-403 as ready,
+        // and "/" needs Clerk plus the database to render, so a bare checkout
+        // times out at startup before a single test runs. robots.txt is static
+        // and excluded from the proxy, so it answers 200 regardless.
+        url: "http://localhost:3000/robots.txt",
         reuseExistingServer: true,
+        timeout: 120_000,
       },
   globalSetup: require.resolve("./e2e/global.setup.ts"),
 });

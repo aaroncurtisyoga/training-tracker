@@ -18,7 +18,7 @@ Split out of `aaroncurtisyoga.com` (the yoga business site), where it lived at
 
 ```bash
 npm run dev
-npm run check            # eslint + tsc --noEmit, run before committing
+npm run check            # eslint + tsc + proxy-matcher assertions
 npm run validate         # check + build
 npm run test:e2e         # Playwright
 npm run garmin:login     # one-time Garmin OAuth token mint
@@ -38,6 +38,14 @@ Migrations: `npx prisma migrate diff` + `npx prisma migrate deploy`, never
 - **The `api/cron/` exclusion in `config.matcher` is load-bearing.** Drop it and
   the nightly cron gets a 307 to `/sign-in`, follows it, returns 200 HTML,
   `assertCronRequest` never runs, and Vercel logs a success while the import dies
+- **Never exclude "any path containing a dot" from the matcher.** Next appends an
+  optional transport suffix (`.rsc`, `.json`, `.segments/...`) to every matcher
+  source so the proxy keeps covering the RSC form of a route, and a leading
+  `(?!.*\..*)` is tested against the whole remaining path, so it rejects the
+  request before that suffix can be split off. Every client-side navigation then
+  skips the proxy, silently. Exclude asset paths by name instead, and run
+  `node scripts/check-proxy-matcher.mjs` (part of `npm run check`), which asserts
+  the gated and skipped sets against Next's own compiled regexes
 - `authorizedParties` is an exact-match array with no wildcard support. It lists
   every host that legitimately serves this Clerk instance. A missing entry 401s
   that host on every authenticated request, so it has to stay in sync with the
@@ -140,3 +148,13 @@ Enums: `MovementCategory`, `UnitType`, `WeightUnit`, `TrainingWorld`,
 
 `pushpress-wod.ts` GETs `trainapi.pushpress.com/workout/workoutOfDay/v1` with a
 hardcoded tenant id, unauthenticated, 6s timeout. No scraping, no Playwright.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

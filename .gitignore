@@ -20,6 +20,8 @@ e2e/playwright/.cache/
 
 # typescript
 *.tsbuildinfo
+# rewritten by next dev vs next build; tsc passes without it
+next-env.d.ts
 
 # misc
 .DS_Store

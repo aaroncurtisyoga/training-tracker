@@ -1,7 +1,7 @@
 import { WeightUnit } from "@prisma/client";
 
 /**
- * One performed set. Any combination of fields is valid — Hyrox stations mix
+ * One performed set. Any combination of fields is valid: Hyrox stations mix
  * weight + distance + time in a single set (e.g. sled push 25m @ 102kg), while
  * a barbell set is just weight + reps. This is the shape stored in
  * LoggedMovement.sets (Json).

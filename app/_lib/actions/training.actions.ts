@@ -23,7 +23,7 @@ type PlanDay = {
   blocks: { label: string; minutes: number | null; text: string }[];
 };
 
-// No caching anywhere in this file on purpose: /train is single-user private
+// No caching anywhere in this file on purpose: this app is single-user private
 // traffic, and stale reads would fight the last-used-weight pre-fill.
 
 /** Seed the movement library on first use so every environment self-heals. */

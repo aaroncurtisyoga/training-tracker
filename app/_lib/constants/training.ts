@@ -11,7 +11,7 @@ type MovementSeed = {
 };
 
 /**
- * Starter movement library, seeded lazily on first /train visit (see
+ * Starter movement library, seeded lazily on first visit (see
  * ensureMovementLibrary). Names match the Hyrox plan doc's wording so the
  * planned-vs-actual matching stays string-simple. defaultUnit follows how each
  * load is actually prescribed: barbell work in lb, Hyrox station loads in kg.

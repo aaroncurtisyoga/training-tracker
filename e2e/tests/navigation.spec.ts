@@ -6,7 +6,7 @@ import { requireAdminCredentials, signInAsAdmin } from "./utils/auth";
  *
  * The tracker moved from aaroncurtisyoga.com/train to its own origin, which
  * meant de-prefixing nine hardcoded navigation targets. Those are string
- * literals, so neither tsc nor eslint can see a missed one — it degrades
+ * literals, so neither tsc nor eslint can see a missed one: it degrades
  * quietly into a 404 on a subpage, which you find out about mid-workout.
  */
 test.describe("navigation", () => {

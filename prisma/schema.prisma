@@ -22,7 +22,7 @@ model Movement {
   createdAt   DateTime         @default(now())
   name        String           @unique
   category    MovementCategory @default(OTHER)
-  // UI hint only — decides which inputs the logger shows first. Any set may
+  // UI hint only: decides which inputs the logger shows first. Any set may
   // still carry any combination of weight/reps/distance/time.
   unitType    UnitType         @default(WEIGHT_REPS)
   defaultUnit WeightUnit       @default(LB)
@@ -53,7 +53,7 @@ enum WeightUnit {
 }
 
 // A prescription for a given calendar day: a seeded Hyrox plan day or a
-// fetched/pasted CrossFit WOD. Logging is never assumed from this — a row
+// fetched/pasted CrossFit WOD. Logging is never assumed from this: a row
 // here is an offer, not a commitment.
 model PlannedSession {
   id        String        @id @default(uuid())
@@ -65,7 +65,7 @@ model PlannedSession {
   rawText   String? // original prescription text (doc export / API text / paste)
   blocks    Json? // structured blocks powering planned-vs-actual
   // External id (PushPress workout uid) so re-fetching a WOD upserts instead
-  // of duplicating — same idea as Event's @@unique([sourceType, sourceId]).
+  // of duplicating. Unique so a re-fetch updates the row it already wrote.
   sourceId  String?       @unique
   loggedSessions LoggedSession[]
 

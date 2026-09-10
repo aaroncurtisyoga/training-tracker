@@ -11,7 +11,7 @@ export const adminCredentials = () => ({
  *
  * There is no route-mocking fallback here on purpose. proxy.ts gates every
  * route server-side on `sessionClaims.metadata.role`, so a mocked client-side
- * session would be turned away before a page ever rendered — a fallback would
+ * session would be turned away before a page ever rendered: a fallback would
  * only produce tests that pass without exercising anything.
  */
 export function requireAdminCredentials() {
@@ -35,10 +35,8 @@ export async function signInAsAdmin(page: Page): Promise<void> {
   });
 }
 
-export async function ensureSignedOut(page: Page): Promise<void> {
-  try {
-    await clerk.signOut({ page });
-  } catch {
-    // Already signed out, which is the state we wanted.
-  }
-}
+// There is deliberately no ensureSignedOut helper. Playwright gives every test a
+// fresh context and the config sets no storageState, so signed-out is already
+// the default. clerk.signOut() polls for window.Clerk with no timeout and hangs
+// forever on a page that hasn't navigated yet, so a "just to be safe" sign-out
+// hook costs the whole test budget and fails the suite it was meant to protect.

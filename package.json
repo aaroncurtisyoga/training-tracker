@@ -10,14 +10,13 @@
     "postinstall": "prisma generate",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "check": "npm run lint && npx tsc --noEmit",
+    "check": "npm run lint && npx tsc --noEmit && node scripts/check-proxy-matcher.mjs",
     "validate": "npm run check && npm run build",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:debug": "playwright test --debug",
     "garmin:login": "tsx scripts/garmin-login.ts",
-    "prepare": "husky",
-    "pre-commit": "lint-staged"
+    "prepare": "husky"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
